@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Login - OTPAuth{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Login with your phone number</p>
+    
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.phone_number.id_for_label }}">Phone Number</label>
+            {{ form.phone_number }}
+            {% if form.phone_number.help_text %}
+                <small class="help-text">{{ form.phone_number.help_text }}</small>
+            {% endif %}
+            {{ form.phone_number.errors }}
+        </div>
+        <button type="submit" class="btn btn-primary">Send OTP</button>
+    </form>
+    
+    <p class="auth-footer">Don't have an account? <a href="{% url 'signup' %}">Signup</a></p>
+</div>
+{% endblock %}

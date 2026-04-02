@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}OTP Event Detail - OTPAuth{% endblock %}
+
+{% block content %}
+<div class="console-detail">
+    <div class="breadcrumb">
+        <a href="{% url 'console_dashboard' %}">Dashboard</a> / Event Details
+    </div>
+
+    <div class="detail-card">
+        <div class="detail-header">
+            <h2>OTP Event Details</h2>
+            <span class="id-tag">{{ event.id }}</span>
+        </div>
+
+        <div class="otp-display">
+            <label>Generated OTP</label>
+            {% if show_otp %}
+                <div class="otp-code">{{ event.plain_otp }}</div>
+                <p class="warning-text">Visible only in development mode.</p>
+            {% else %}
+                <div class="otp-code">******</div>
+                <p class="info-text">OTP hidden in production for security.</p>
+            {% endif %}
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <label>Phone Number</label>
+                <p>{{ event.otp_request.phone_number }}</p>
+            </div>
+            <div class="info-item">
+                <label>Purpose</label>
+                <p>{{ event.otp_request.get_purpose_display }}</p>
+            </div>
+            <div class="info-item">
+                <label>Created At</label>
+                <p>{{ event.created_at }}</p>
+            </div>
+            <div class="info-item">
+                <label>Expires At</label>
+                <p>{{ event.otp_request.expires_at }}</p>
+            </div>
+            <div class="info-item">
+                <label>Attempts</label>
+                <p>{{ event.otp_request.attempts }} / {{ event.otp_request.max_attempts }}</p>
+            </div>
+            <div class="info-item">
+                <label>Verification Status</label>
+                <p>{% if event.is_verified %}Verified{% else %}Pending{% endif %}</p>
+            </div>
+        </div>
+        
+        <div class="request-metadata">
+            <h3>Request Metadata</h3>
+            <p><strong>IP Address:</strong> {{ event.otp_request.request_ip }}</p>
+            <p><strong>User Agent:</strong> {{ event.otp_request.user_agent }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

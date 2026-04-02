@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Console Dashboard - OTPAuth{% endblock %}
+
+{% block content %}
+<div class="console-dashboard">
+    <header class="console-header">
+        <h1>Console Dashboard</h1>
+        <a href="{% url 'console_otp_list' %}" class="btn btn-sm btn-dark">View All Events</a>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Recent OTP Events</h3>
+            <p class="stat-value">{{ events.count }}</p>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Phone</th>
+                    <th>Purpose</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr>
+                    <td>{{ event.otp_request.masked_phone }}</td>
+                    <td>{{ event.otp_request.get_purpose_display }}</td>
+                    <td>{{ event.created_at|timesince }} ago</td>
+                    <td>
+                        {% if event.is_verified %}
+                            <span class="status-badge success">Verified</span>
+                        {% else %}
+                            <span class="status-badge pending">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url 'console_otp_detail' event.pk %}" class="btn-link">Details</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No recent events</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

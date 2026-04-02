@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - OTPAuth{% endblock %}
+
+{% block content %}
+<div class="profile-card">
+    <div class="profile-header">
+        <div class="avatar">{{ user.full_name|slice:":1" }}</div>
+        <h2>{{ user.full_name }}</h2>
+        <span class="badge">Verified</span>
+    </div>
+    
+    <div class="profile-details">
+        <div class="detail-item">
+            <label>Phone Number</label>
+            <p>{{ user.phone_number }}</p>
+        </div>
+        <div class="detail-item">
+            <label>Member Since</label>
+            <p>{{ user.date_joined|date:"F d, Y" }}</p>
+        </div>
+        <div class="detail-item">
+            <label>Account ID</label>
+            <p class="mono">{{ user.id }}</p>
+        </div>
+    </div>
+    
+    <div class="profile-actions">
+        <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+    </div>
+</div>
+{% endblock %}

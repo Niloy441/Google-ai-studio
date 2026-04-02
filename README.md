@@ -1,11 +1,50 @@
-<div align="center">
+# OTP Auth System
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+A Django-based authentication system using phone numbers and OTP.
 
-  <h1>Built with AI Studio</h2>
+## Features
+- Signup/Login with Phone Number
+- Custom User Model
+- Secure OTP Hashing
+- Internal Admin Console for OTP viewing (Dev mode)
+- Swappable OTP Providers
+- Rate Limiting & Security best practices
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Tech Stack
+- Django 5.0
+- PostgreSQL
+- Redis & Celery
+- Vanilla JS & CSS
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## Setup Instructions
 
-</div>
+1. **Clone and install dependencies:**
+   ```bash
+   pip install -r requirements/dev.txt
+   ```
+
+2. **Environment Variables:**
+   Copy `.env.example` to `.env` and fill in the values.
+
+3. **Database Migrations:**
+   ```bash
+   python manage.py migrate
+   ```
+
+4. **Create Superuser (for Console access):**
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+5. **Run Development Server:**
+   ```bash
+   python manage.py runserver
+   ```
+
+6. **Run Celery (for background tasks):**
+   ```bash
+   celery -A config worker -l info
+   ```
+
+## OTP Verification in Dev Mode
+When you request an OTP during signup or login, go to `/console/dashboard/` (login as admin) to see the generated code.

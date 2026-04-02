@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Verify OTP - OTPAuth{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <h2>Verify OTP</h2>
+    <p class="subtitle">We've sent a 6-digit code to <strong>{{ phone }}</strong></p>
+    
+    <form method="post" class="auth-form" id="otp-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.otp.id_for_label }}">Enter Code</label>
+            {{ form.otp }}
+            {{ form.otp.errors }}
+        </div>
+        <button type="submit" class="btn btn-primary" id="verify-btn">Verify & Continue</button>
+    </form>
+    
+    <div class="resend-section">
+        <p id="timer-text">Resend code in <span id="timer">60</span>s</p>
+        <form action="{% if purpose == 'Signup' %}{% url 'signup' %}{% else %}{% url 'login' %}{% endif %}" method="post" id="resend-form" style="display: none;">
+            {% csrf_token %}
+            <input type="hidden" name="phone_number" value="{{ phone }}">
+            {% if purpose == 'Signup' %}
+                <input type="hidden" name="full_name" value="{{ request.session.signup_full_name }}">
+            {% endif %}
+            <button type="submit" class="btn-link">Resend OTP</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let timeLeft = 60;
+        const timerSpan = document.getElementById('timer');
+        const timerText = document.getElementById('timer-text');
+        const resendForm = document.getElementById('resend-form');
+        const verifyBtn = document.getElementById('verify-btn');
+        const otpForm = document.getElementById('otp-form');
+
+        const countdown = setInterval(function() {
+            timeLeft--;
+            timerSpan.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerText.style.display = 'none';
+                resendForm.style.display = 'block';
+            }
+        }, 1000);
+
+        otpForm.addEventListener('submit', function() {
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+        });
+    });
+</script>
+{% endblock %}
